@@ -62,13 +62,6 @@ int main(int argc, char *argv[]) {
     serv_addr.sin_addr.s_addr = ((struct in_addr *)host_ptr -> h_addr_list[0]) -> s_addr;
     serv_addr.sin_port = htons(port);
 
-    if(bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
-
-        perror("Can't open stream socket");
-        exit(1);
-
-    }
-
     if(connect(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
 
         perror("Cant connect to the server");
