@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <netdb.h>
 
-#define SERV_TCP_FORT 18 //Server's Port Number
+#define SERV_TCP_PORT 18 //Server's Port Number
 
 int main(int argc, char *argv[]) {
 
@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     }
     else {
 
-        port = SERV_TCP_FORT;
+        port = SERV_TCP_PORT;
 
     }
 
@@ -52,11 +52,11 @@ int main(int argc, char *argv[]) {
 
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd < 0) {
-        perror("Can't open stream socket");
+        perror("Socket Error: Can't open stream socket");
         exit(1);
     }
 
-    //Bind Local Address so tht the client can send to server
+    //Bind Local Address so that the client can send to server
     bzero((char *) &serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = ((struct in_addr *)host_ptr -> h_addr_list[0]) -> s_addr;
@@ -69,8 +69,23 @@ int main(int argc, char *argv[]) {
 
     }
 
-    //write a message to the server
-    write(sockfd, "hello world CMPSC 311", sizeof("hello world CMPSC 311"));
+    char input[1024];
+    char user_input[1024];
+
+    while(1) {
+
+        //Write Message to the Server
+        printf("Enter a message: ");
+        fgets(input, sizeof(input), stdin);
+
+        //Appends Username (Can be edited later for more dynamic Username)
+        strcpy(user_input, "User1: ");
+        strcat(user_input, input);
+
+
+        write(sockfd, user_input, strlen(user_input));
+
+    }
 
     close(sockfd);
 
