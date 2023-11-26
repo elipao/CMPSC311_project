@@ -6,9 +6,33 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <pthread.h>
 
-#define SERV_TCP_FORT 18 //Server's Port Number
-#define MAX_SIZE 80
+#define SERV_TCP_PORT 18 //Server's Port Number
+#define MAX_SIZE 1024
+
+void *new_client(void *arg) {
+
+    int newsockfd = *((int *)arg);
+    char string[MAX_SIZE];
+
+    for(;;) {
+
+            //Read message from the client
+            int len = read(newsockfd, string, MAX_SIZE);
+
+            if(len <= 0)
+                break;
+
+            string[len] = 0;
+            printf("%s\n", string);
+
+        }
+
+    close(newsockfd);
+    pthread_exit(NULL);
+
+}
 
 int main(int argc, char *argv[]) {
 
@@ -16,7 +40,6 @@ int main(int argc, char *argv[]) {
     struct sockaddr_in serv_addr, cli_addr;
     int port;
     char string[MAX_SIZE];
-    int buff_size = 0;
 
 
     //Command line: Server [port_number]
@@ -28,7 +51,7 @@ int main(int argc, char *argv[]) {
     }
     else {
 
-        port = SERV_TCP_FORT;
+        port = SERV_TCP_PORT;
 
     }
 
@@ -40,7 +63,7 @@ int main(int argc, char *argv[]) {
 
     }
 
-    //Bind Local Address so tht the client can send to server
+    //Bind Local Address so that the client can send to server
     bzero((char *) &serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -66,16 +89,22 @@ int main(int argc, char *argv[]) {
 
             perror("Can't bind local address");
 
+            //Allows Server to Keep Listening instead of Terminating
+            continue;
+
         }
 
-        //Read message from the client
-        int len = read(newsockfd, string, MAX_SIZE);
-        //Make sure its proper string
-        string[len] = 0;
-        printf("%s\n", string);
+        pthread_t new_connection;
+        if(pthread_create(&new_connection, NULL, new_client, (void *)&newsockfd) != 0) {
 
-        close(newsockfd);
+            perror("Error Creating Thread");
+            close(newsockfd);
+
+        }
+
 
     }
+
+    close(sockfd);
 
 }
