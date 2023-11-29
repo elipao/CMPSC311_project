@@ -7,8 +7,29 @@
 #include <string.h>
 #include <unistd.h>
 #include <netdb.h>
+#include <fcntl.h>
 
 #define SERV_TCP_PORT 18 //Server's Port Number
+#define MAX_SIZE 1024
+
+void loadPreviousPosts(int sockfd) {
+    int fd;
+    char buffer[MAX_SIZE];
+    ssize_t bytesRead;
+
+    fd = open("Server_messages.log", O_RDONLY);
+
+    if (fd < 0) {
+        close(fd);
+    }
+
+    // Read and send previous posts
+    while ((bytesRead = read(fd, buffer, sizeof(buffer))) > 0) {
+        printf("%s", buffer);
+    }
+
+    close(fd);
+}
 
 int main(int argc, char *argv[]) {
 
@@ -71,6 +92,9 @@ int main(int argc, char *argv[]) {
 
     char input[1024];
     char user_input[1024];
+
+    // Load previous posts
+    loadPreviousPosts(sockfd);
 
     while(1) {
 
