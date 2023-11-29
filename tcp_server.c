@@ -6,7 +6,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <pthread.h>
+#include <sys/stat.h>
 
 #define SERV_TCP_PORT 18 //Server's Port Number
 #define MAX_SIZE 1024
@@ -15,8 +17,11 @@ void *new_client(void *arg) {
 
     int newsockfd = *((int *)arg);
     char string[MAX_SIZE];
+    int fd;
 
     for(;;) {
+
+            fd = open("Server_messages.log", O_WRONLY | O_CREAT | O_APPEND, 0777);
 
             //Read message from the client
             int len = read(newsockfd, string, MAX_SIZE);
@@ -25,6 +30,13 @@ void *new_client(void *arg) {
                 break;
 
             string[len] = 0;
+
+            // Add a newline character to the received string
+            strcat(string, "\n");
+
+            // Write the received string to the log file
+            write(fd, string, strlen(string));
+
             printf("%s\n", string);
 
         }
