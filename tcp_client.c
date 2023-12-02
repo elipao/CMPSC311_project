@@ -8,11 +8,13 @@
 #include <unistd.h>
 #include <netdb.h>
 #include <fcntl.h>
+#include <pthread.h>
 
 #define SERV_TCP_PORT 18 //Server's Port Number
 #define MAX_SIZE 1024
 
 void loadPreviousPosts(int sockfd) {
+    /*
     int fd;
     char buffer[MAX_SIZE];
     ssize_t bytesRead;
@@ -29,6 +31,43 @@ void loadPreviousPosts(int sockfd) {
     }
 
     close(fd);
+    */
+
+}
+
+void *postPost(void *arg) {
+    char input[1024];
+    char user_input[1024];
+    int sockfd = *((int *) arg);
+    while(1) {
+
+        //Write Message to the Server
+        printf("Enter a message: ");
+        fgets(input, sizeof(input), stdin);
+
+        //Appends Username (Can be edited later for more dynamic Username)
+        strcpy(user_input, "User1: ");
+        strcat(user_input, input);
+
+
+        write(sockfd, user_input, strlen(user_input));
+
+    }
+}
+
+void *readPosts(void *arg) {
+    int sockfd = *((int *) arg);
+    while (1) {
+        char receivedString[MAX_SIZE];
+        int len = read(sockfd, receivedString, MAX_SIZE);
+
+        if(len <= 0)
+            break;
+
+        receivedString[len] = 0;
+
+        printf("%s\n", receivedString);
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -90,26 +129,23 @@ int main(int argc, char *argv[]) {
 
     }
 
-    char input[1024];
-    char user_input[1024];
+    pthread_t postThread;
+    if(pthread_create(&postThread, NULL, postPost, (void *)&sockfd) != 0) {
 
-    // Load previous posts
-    loadPreviousPosts(sockfd);
-
-    while(1) {
-
-        //Write Message to the Server
-        printf("Enter a message: ");
-        fgets(input, sizeof(input), stdin);
-
-        //Appends Username (Can be edited later for more dynamic Username)
-        strcpy(user_input, "User1: ");
-        strcat(user_input, input);
-
-
-        write(sockfd, user_input, strlen(user_input));
-
+            perror("Error Creating Thread");
+            close(sockfd);
+            return -1;
     }
+
+    pthread_t readThread;
+    if(pthread_create(&readThread, NULL, readPosts, (void *)&sockfd) != 0) {
+
+            perror("Error Creating Thread");
+            close(sockfd);
+            return -1;
+    }
+
+    while(1);
 
     close(sockfd);
 
