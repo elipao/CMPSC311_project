@@ -19,7 +19,7 @@ sudo ./server
 javac clientGUI.java GetName.java
 java clientGUI
 ```
-3. Enter a valid name and choose 1 of 3 themes:
+3. The GUI will pop up. Enter a valid name and choose 1 of 3 themes:
 <img width="211" alt="image" src="https://github.com/elipao/CMPSC311_project/assets/63485234/a2760ddb-793d-43f2-b347-fd850a4035c3">
 
 Default Theme:
@@ -34,7 +34,7 @@ Blue Theme:
 
 <img width="450" alt="image" src="https://github.com/elipao/CMPSC311_project/assets/63485234/95af2752-079c-4d5f-9bab-7674e996bb77">
 
-4. Open up to 5 clients using the running clientGUI.java. 
+4. Optional: Open additional clients (max of 5 clients) by running clientGUI.java (see step 2).
 
 
 
