@@ -7,18 +7,19 @@ import javax.swing.border.EmptyBorder;
 public class StartFrame extends JFrame implements ActionListener {
     private JTextField nameBox = new JTextField();
     private JLabel welcomeMessage = new JLabel("Welcome to our Chat Application. Please enter your name to begin chatting!");
-    private JLabel errorMessage = new JLabel(" "); 
+    private JLabel errorMessage = new JLabel(" ");
+    public String enteredName;
 
     public StartFrame() {
         SwingUtilities.invokeLater(() -> {
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setSize(500, 150);
+            setSize(550, 150);
             setLayout(new BorderLayout());
             JButton submitButton = new JButton("Submit");
 
             submitButton.addActionListener(this);
 
-            nameBox.setColumns(10);
+            nameBox.setColumns(5);
 
             JPanel centerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             centerPanel.add(welcomeMessage);
@@ -39,20 +40,20 @@ public class StartFrame extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        String enteredName = nameBox.getText().trim();
+        enteredName = nameBox.getText().trim();
 
         if (isValidName(enteredName)) {
-            System.out.println("Valid name: " + enteredName);
-            errorMessage.setText(" "); 
-            //add here logic to switch slides 
+            this.dispose();
         } else {
             System.out.println("Invalid name: " + enteredName);
-            errorMessage.setText("Invalid entry, try again"); 
-            errorMessage.setForeground(Color.RED); 
+            errorMessage.setText("Invalid entry, try again");
+            errorMessage.setForeground(Color.RED);
         }
     }
 
     private boolean isValidName(String name) {
         return !name.isEmpty() && name.matches("^[a-zA-Z]+$");
     }
+
+   
 }

@@ -12,10 +12,11 @@ public class clientGUI extends JFrame {
     private JTextField messageInput;
     private PrintWriter out;
     private BufferedReader in;
+    private String userName; 
 
-    public clientGUI() {
-        initComponents();
-        connectToServer();
+    public clientGUI(String name) {
+        this.initComponents();
+        this.connectToServer();
     }
 
     // set up components
@@ -37,6 +38,7 @@ public class clientGUI extends JFrame {
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(scrollPane, BorderLayout.CENTER);
         getContentPane().add(messageInput, BorderLayout.SOUTH);
+        this.setVisible(true);
     }
 
     private void connectToServer() {
@@ -63,7 +65,7 @@ public class clientGUI extends JFrame {
     private void sendMessage() {
         String message = messageInput.getText();
         // send user's message to server socket 
-        out.println(message);
+        this.out.println(message);
         messageInput.setText("");
     }
 
@@ -76,7 +78,7 @@ public class clientGUI extends JFrame {
                     if (message == null) {
                         break;  
                     }
-                    SwingUtilities.invokeLater(() -> messageArea.append(message + "\n"));
+                    SwingUtilities.invokeLater(() -> messageArea.append(userName + ": " + message + "\n"));
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -84,7 +86,10 @@ public class clientGUI extends JFrame {
         }).start();
     }
 
+    
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new clientGUI().setVisible(true));
+        StartFrame startFrame = new StartFrame();
+        SwingUtilities.invokeLater(() -> new clientGUI(startFrame.enteredName).setVisible(true));
     }
+     
 }

@@ -14,6 +14,16 @@
 #define MAX_SIZE 1024
 int newsockfdList[5];
 
+
+void writeToClient(char message[MAX_SIZE]) {
+    for (int i = 0; i < sizeof(newsockfdList) / 4; i++) {
+        //printf("size: (%d)\ni: (%d)\nnewsockfd: (%d)\n", sizeof(newsockfdList), i, newsockfdList[i]);
+        if (newsockfdList[i] != 0) {
+            write(newsockfdList[i], message, strlen(message));
+        }
+    }
+}
+
 void *new_client(void *arg) {
 
     int newsockfd = *((int *)arg);
@@ -55,14 +65,7 @@ void *new_client(void *arg) {
 
 }
 
-void writeToClient(char message[MAX_SIZE]) {
-    for (int i = 0; i < sizeof(newsockfdList) / 4; i++) {
-        //printf("size: (%d)\ni: (%d)\nnewsockfd: (%d)\n", sizeof(newsockfdList), i, newsockfdList[i]);
-        if (newsockfdList[i] != 0) {
-            write(newsockfdList[i], message, strlen(message));
-        }
-    }
-}
+
 
 int main(int argc, char *argv[]) {
 
