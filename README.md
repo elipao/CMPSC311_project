@@ -6,6 +6,7 @@ Run Requirements
 - Java version 11 
 
 Run Instructions:
+
 0. Download tcp_server.c, clientGUI.java, and GetName.java in the same file directory. 
 1. In the terminal, compile and run tcp_server.c code. 
 ```
