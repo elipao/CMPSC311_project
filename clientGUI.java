@@ -68,14 +68,18 @@ public class clientGUI extends JFrame {
         LocalTime currentTime = LocalTime.now();
         String midday = "AM"; 
         String minute = "" + currentTime.getMinute(); 
-        
+        int hour = currentTime.getHour()%12; 
+
+        if(hour == 0){ // when military time is 0000 or 2400
+            hour = 12; 
+        }
         if(currentTime.getHour() > 11){
             midday = "PM"; 
         }
         if(currentTime.getMinute() < 10){ 
             minute = "0" + currentTime.getMinute(); 
         }
-        return(currentTime.getHour()%12 + ":" + minute + " " + midday); 
+        return(hour + ":" + minute + " " + midday); 
     }
 
     // set up components + add cosmetics / make it pretty
