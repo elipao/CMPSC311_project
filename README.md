@@ -1,11 +1,11 @@
 # CMPSC311_project
 CMPSC 311 Final Project: Chat Application with Client and Server Components
 
-Run Requirements
+Application Requirements
 - Linux OS
 - Java version 11 
 
-Run Instructions:
+Instructions to Run Application:
 
 0. Download tcp_server.c, clientGUI.java, and GetName.java in the same file directory. 
 1. In the terminal, compile and run tcp_server.c code. 
