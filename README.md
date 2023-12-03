@@ -1,13 +1,12 @@
 # CMPSC311_project
-CMPSC 311 Final Project: Chat Application with Client and Server Components
-
+## CMPSC 311 Final Project: Chat Application with Client and Server Components
 The goal of this project is to implement a server-client tcp connection where the backend (server) is set up in C and the frontend (GUI) for the clients to connect to the server which is setup in Java and utilizes the Swing and AWT API. The file tcp_server.c contains the C code for the server which, in brief, creates a socket and waits for a client to connect. Once a client connects, it creates a thread which opens a new socket that opens and writes to a file. The socket serves as a way for the Java GUI (GetName.java and clientGUI.java) to connect to the server, and write to the file opened by the new socket fd which is binded to the client. 
 
-Application Requirements
+## Requirements to Run Application
 - Linux OS or virtual machine 
 - Java version 11 
 
-Instructions to Run Application:
+## Instructions to Run Application
 
 0. Download tcp_server.c, clientGUI.java, and GetName.java in the same file directory. 
 1. In the terminal, compile and run tcp_server.c code. 
